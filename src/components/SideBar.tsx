@@ -12,11 +12,11 @@ function SideBar() {
       <div>
         <h4 className="text-gray-400 text-sm font-bold mb-2">LOCATION</h4>
         <div className="relative z-10 sm:text-sm shadow-md rounded-lg">
-          <i className="fa-solid fa-briefcase absolute mt-[14.5px] ml-4 text-gray-400" />
+          <i className="fa-solid fa-globe absolute mt-[14.5px] ml-4 text-gray-400" />
           <input
             type="text"
             className="py-3 pl-10 outline-none rounded-md text-xs w-full"
-            placeholder="City, state, zip code or country"
+            placeholder="Country"
           />
         </div>
       </div>
