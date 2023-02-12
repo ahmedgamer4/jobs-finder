@@ -1,65 +1,62 @@
-import background from "./assets/backgroundImg.png"
+import React from 'react';
+import Header from './components/Header';
+import SideBar from './components/SideBar';
+import jobs from './jobs.json';
 
-const App = () => {
+function Job({
+  company, title, jobType, logo,
+}: { company: string, title: string, jobType: string, logo: string | undefined }) {
   return (
-    <div className="min-h-screen w-11/12 mx-auto pt-7">
-      <header className="">
-        <h1 className="text-gray-800 text-lg">
-          {" "}
-          <b>Jobs </b>Finder
-        </h1>
-        <div className="mt-8 relative flex flex-col h-28">
-          <img src={background} className="h-28 object-cover rounded-lg" alt="" />
-          <div className="absolute z-10 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 sm:text-sm sm:w-4/6 ">
-            <i className="fa-solid fa-briefcase absolute mt-[17.5px] ml-4 text-gray-400"></i>
-            <input
-              type="text"
-              className="py-4 pl-10 outline-none rounded-md text-xs w-full"
-              placeholder="Title, companies, expertise or benefits"
-            />
-            <button className="bg-blue-500 absolute -ml-[130px] mt-[3px] text-sm text-white px-10 py-[11px] text-center font-bold rounded-md">Search</button>
+    <section className="flex justify-between p-4">
+      <div className="flex gap-2">
+        <img src={logo} alt="Company logo" className="rounded-md" />
+        <div className="flex flex-col gap-2">
+          <p>{company}</p>
+          <h3>
+            {title}
+          </h3>
+          <div className="border border-blue-700 rounded-sm text-blue-700 text-xs">
+            {jobType === 'full_time'
+              ? (
+                <div>
+                  Full time
+                </div>
+              ) : null}
           </div>
         </div>
-      </header>
-
-      <main>
-        <section>
-          <div className="flex justify-start items-center text-sm gap-2">
-            <input name="city" id="full-time" type="checkbox" />
-            <label htmlFor="full-time">Full time</label>
-          </div>
-
-          <div>
-            <h4 className="text-gray-500">LOCATION</h4>
-            <div>
-              
-            </div>
-          </div>
-
-          <div>
-            <div className="flex justify-start items-center text-sm gap-2">
-              <input name="city" id="london" type="radio" />
-              <label htmlFor="london">London</label>
-            </div>
-            <div className="flex justify-start items-center text-sm gap-2">
-              <input name="city" type="radio" id="amesterdam" />
-              <label htmlFor="amesterdam">Amesterdam</label>
-            </div>
-            <div className="flex justify-start items-center text-sm gap-2">
-              <input name="city" type="radio" id="new-york" />
-              <label htmlFor="new-york">New York</label>
-            </div>
-            <div className="flex justify-start items-center text-sm gap-2">
-              <input name="city" type="radio" id="berlin" />
-              <label htmlFor="berlin">Berlin</label>
-            </div>
-          </div>
-        </section>
-
-        <section></section>
-      </main>
-    </div>
-  )
+      </div>
+      <div>
+        <p />
+        <p />
+      </div>
+    </section>
+  );
 }
 
-export default App
+function App() {
+  console.log(jobs);
+  const job = jobs.jobs[0];
+
+  return (
+    <div className="min-h-screen w-11/12 mx-auto pt-7">
+      <Header />
+      <main className="flex gap-6">
+        <SideBar />
+        <section>
+          <div>
+            <Job
+              company={job.company_name}
+              jobType={job.job_type}
+              logo={job.company_logo_url}
+              title={job.title}
+              key={job.id}
+            />
+          </div>
+          <div />
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default App;
