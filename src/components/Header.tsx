@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import JobsContext, { JobType } from '../contexts/JobsContext';
+import getJobs from '../services/jobs';
 import background from './assets/backgroundImg.png';
 
 function Header() {
+  const { jobs, dispatchJobs } = useContext(JobsContext);
+  const [searchInput, setSearchInput] = useState('');
+  const [currentJobs, setCurrentJobs] = useState<any>();
+
+  useEffect(
+    () => {
+      getJobs().then((res) => {
+        setCurrentJobs(res);
+        dispatchJobs({ type: 'SET_JOBS', jobs: res });
+      });
+    },
+    [],
+  );
+
+  const setSearch = () => {
+    const newJobs = currentJobs
+      .jobs.filter((j: JobType) => j.title.toLowerCase().includes(searchInput));
+    dispatchJobs({
+      type: 'SET_JOBS',
+      jobs: { 'job-count': newJobs.length, jobs: newJobs },
+    });
+    setSearchInput('');
+  };
+
   return (
     <header className="">
       <div className="mt-8 relative flex flex-col h-28">
@@ -11,12 +38,15 @@ function Header() {
           <input
             type="text"
             className="py-4 pl-10 outline-none rounded-md text-xs w-full"
-            placeholder="Title, companies, expertise or benefits"
+            placeholder="Search by job title...."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
           <button
             className="bg-blue-500 sm:absolute text-xs sm:text-sm sm:-ml-[130px] mt-[3px]
              text-white px-6 sm:px-10 py-[11px] text-center font-bold rounded-md"
             type="button"
+            onClick={setSearch}
           >
             Search
           </button>

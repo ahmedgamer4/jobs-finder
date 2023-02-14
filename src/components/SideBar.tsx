@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import JobsContext, { JobType } from '../contexts/JobsContext';
+import getJobs from '../services/jobs';
 
 function SideBar() {
+  const { jobs, dispatchJobs } = useContext(JobsContext);
+  const [allJobs, setAllJobs] = useState({});
+
+  useEffect(() => {
+    getJobs().then((res) => setAllJobs(res));
+  }, []);
+
+  const onClick = async (e) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    const newJobs = allJobs.jobs.filter((j: JobType) => j.job_type === 'full_time');
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    e.target.checked === true
+      ? dispatchJobs({ type: 'SET_JOBS', jobs: { 'jobs-count': newJobs.length, jobs: newJobs } })
+      : dispatchJobs({ type: 'SET_JOBS', jobs: allJobs });
+  };
+
+  const handleCountrySearchChange = (e) => {
+    const newJobs = allJobs.jobs.filter((j: JobType) => j.candidate_required_location
+      .toLowerCase().includes(e.target.value.toLowerCase()));
+    dispatchJobs({ type: 'SET_JOBS', jobs: { 'jobs-count': newJobs.length, jobs: newJobs } });
+  };
+
   return (
     <section className="sm:w-1/3 mt-4">
       <div className="text-sm mb-5 ml-2">
         <label htmlFor="full-time">
-          <input name="city" id="full-time" className="mr-2" type="checkbox" />
+          <input
+            name="city"
+            id="full-time"
+            className="mr-2"
+            type="checkbox"
+            onChange={onClick}
+          />
           Full time
         </label>
       </div>
@@ -17,35 +47,8 @@ function SideBar() {
             type="text"
             className="py-3 pl-10 outline-none rounded-md text-xs w-full"
             placeholder="Country"
+            onChange={handleCountrySearchChange}
           />
-        </div>
-      </div>
-
-      <div className="text-sm text-gray-900 mt-5 ml-2 flex flex-col gap-2">
-        <div className="">
-          <label htmlFor="london">
-            <input name="city" className="mr-2" id="london" type="radio" />
-            London
-          </label>
-        </div>
-        <div className="">
-          <label htmlFor="amesterdam">
-            <input name="city" className="mr-2" type="radio" id="amesterdam" />
-            Amesterdam
-          </label>
-        </div>
-        <div className="">
-          <label htmlFor="new-york">
-            <input name="city" className="mr-2" type="radio" id="new-york" />
-            New York
-
-          </label>
-        </div>
-        <div className="">
-          <label htmlFor="berlin">
-            <input name="city" className="mr-2" type="radio" id="berlin" />
-            Berlin
-          </label>
         </div>
       </div>
     </section>
