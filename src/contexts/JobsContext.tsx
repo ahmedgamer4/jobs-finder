@@ -1,5 +1,5 @@
 import React, {
-  createContext, useMemo, useReducer,
+  createContext, useReducer,
 } from 'react';
 // import getJobs from '../services/jobs';
 // import data from '../jobs.json';
@@ -33,7 +33,13 @@ function jobsReducer(state: { 'job-count': number, jobs: JobType[] }, action: { 
   }
 }
 
-const JobsContext = createContext<JobsType | null>(null);
+const JobsContext = createContext<JobsType | React.Dispatch<{
+  type: string;
+  jobs: {
+    'job-count': number;
+    jobs: JobType[];
+  };
+}>>({});
 
 export function JobsContextProvider({ children }: { children: React.ReactNode }) {
   // const data = () => getJobs().then((res) => res);

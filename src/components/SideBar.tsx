@@ -1,14 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import JobsContext, { JobType } from '../contexts/JobsContext';
+import JobsContext, { JobsType, JobType } from '../contexts/JobsContext';
 import getJobs from '../services/jobs';
 
-function SideBar() {
+function SideBar({ allJobs }: { allJobs: JobsType | undefined }) {
   const { jobs, dispatchJobs } = useContext(JobsContext);
-  const [allJobs, setAllJobs] = useState({});
-
-  useEffect(() => {
-    getJobs().then((res) => setAllJobs(res));
-  }, []);
 
   const onClick = async (e) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions

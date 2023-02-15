@@ -1,26 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import JobsContext, { JobType } from '../contexts/JobsContext';
+import JobsContext, { JobsType, JobType } from '../contexts/JobsContext';
 import getJobs from '../services/jobs';
 import background from './assets/backgroundImg.png';
 
-function Header() {
+function Header({ allJobs }: { allJobs: JobsType | undefined }) {
   const { jobs, dispatchJobs } = useContext(JobsContext);
   const [searchInput, setSearchInput] = useState('');
-  const [currentJobs, setCurrentJobs] = useState<any>();
-
-  useEffect(
-    () => {
-      getJobs().then((res) => {
-        setCurrentJobs(res);
-        dispatchJobs({ type: 'SET_JOBS', jobs: res });
-      });
-    },
-    [],
-  );
 
   const setSearch = () => {
-    const newJobs = currentJobs
+    const newJobs = allJobs
       .jobs.filter((j: JobType) => j.title.toLowerCase().includes(searchInput));
     dispatchJobs({
       type: 'SET_JOBS',
