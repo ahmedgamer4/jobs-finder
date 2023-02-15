@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Parser from 'html-react-parser';
 
 type JobPostType = {
   title: string,
@@ -14,6 +16,8 @@ type JobPostType = {
 function JobPost({
   title, fullTime, days, logo, description, country, company,
 }: JobPostType) {
+  const today = new Date();
+
   return (
     <div className="flex flex-col sm:flex-row gap-10 mt-8">
       <section className="w-1/3">
@@ -41,7 +45,7 @@ function JobPost({
             )
             : null}
         </div>
-        <p>{days}</p>
+        <p>{`${String(today.getDate() - Number(days.slice(8, 10)))} days ago`}</p>
         <div className="flex gap-2">
           <img src={logo} alt="company logo" className="w-[40px] h-[40px]" />
           <div>
@@ -49,8 +53,8 @@ function JobPost({
             <p>{country}</p>
           </div>
         </div>
-        <div dangerouslySetInnerHTML={{__html: description}}>
-          {/* {description} */}
+        <div>
+          {Parser(description)}
         </div>
       </section>
     </div>

@@ -10,11 +10,13 @@ import JobPost from './components/JobPost';
 import JobContext from './contexts/JobContext';
 import JobsContext, { JobsType, JobType } from './contexts/JobsContext';
 import getJobs from './services/jobs';
+import Footer from './components/Footer';
 
-function Home() {
-  const { jobs, dispatchJobs } = useContext(JobsContext);
+function Home({
+  currentItems, setCurrentItems,
+}: { currentItems: JobType[] | undefined, setCurrentItems: (value: JobType[]) => void }) {
+  const { dispatchJobs } = useContext(JobsContext);
   const [allJobs, setAllJobs] = useState<JobsType>();
-  const [currentItems, setCurrentItems] = useState<JobType[]>();
 
   const { isLoading } = useQuery({
     queryKey: ['jobs'],
@@ -24,7 +26,7 @@ function Home() {
       setAllJobs(res);
       setCurrentItems(res.jobs.slice(0, 5));
     },
-    refetchOnWindowFocus: false,
+    retryOnMount: true,
   });
 
   return (
@@ -40,32 +42,34 @@ function Home() {
 }
 
 function App() {
-  const [currentJob] = useContext(JobContext);
+  const { job } = useContext(JobContext);
+  const [currentItems, setCurrentItems] = useState<JobType[]>();
 
   return (
-    <div className="min-h-screen w-11/12 mx-auto pt-7 mb-8">
+    <div className="min-h-screen w-11/12 mx-auto py-7">
       <h1 className="text-gray-800 text-lg">
         {' '}
         <b>Jobs </b>
         Finder
       </h1>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home currentItems={currentItems} setCurrentItems={setCurrentItems} />} />
         <Route
           path="/Jobs/:id"
           element={(
             <JobPost
-              company={currentJob.company_name}
-              country={currentJob.country}
-              days={currentJob.days}
-              description={currentJob.description}
-              fullTime={currentJob.job_type}
-              logo={currentJob.company_logo}
-              title={currentJob.title}
+              company={job.company_name}
+              country={job.candidate_required_location}
+              days={job.publication_date}
+              description={job.description}
+              fullTime={job.job_type}
+              logo={job.company_logo}
+              title={job.title}
             />
           )}
         />
       </Routes>
+      <Footer />
     </div>
   );
 }

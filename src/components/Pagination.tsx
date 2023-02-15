@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { JobsType, JobType } from '../contexts/JobsContext';
 
-function PaginatedItems({ items, setCurrentItems }
-  : { items: JobsType, setCurrentItems: (items: JobType[]) => void }) {
+function PaginatedItems({
+  items, setCurrentItems,
+}: {
+  items: JobsType, setCurrentItems: (items: JobType[]) => void
+}) {
   const [itemOffset, setItemOffset] = useState(0);
 
   const itemsPerPage = 5;
@@ -13,15 +16,12 @@ function PaginatedItems({ items, setCurrentItems }
 
   useEffect(() => {
     setCurrentItems(currentItems);
-  }, [itemOffset]);
+  }, [itemOffset, items]);
 
   const pageCount = Math.ceil(items.jobs.length / itemsPerPage);
 
-  const handlePageClick = (event) => {
+  const handlePageClick = (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % items.jobs.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`,
-    );
     setItemOffset(newOffset);
   };
 
@@ -34,7 +34,7 @@ function PaginatedItems({ items, setCurrentItems }
       pageCount={pageCount}
       renderOnZeroPageCount={undefined}
       previousLabel="< previous"
-      className="flex gap-6 rounded-md shadow-sm p-3"
+      className="flex flex-col sm:flex-row gap-1 sm:gap-5 rounded-md p-3"
       breakClassName="pagination-btn"
     />
   );

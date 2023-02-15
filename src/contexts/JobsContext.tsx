@@ -2,7 +2,7 @@ import React, {
   createContext, useReducer,
 } from 'react';
 // import getJobs from '../services/jobs';
-// import data from '../jobs.json';
+import data from '../jobs.json';
 
 export interface JobType {
   id: number,
@@ -19,12 +19,14 @@ export interface JobType {
   description: string,
 }
 
-export type JobsType = {
-  'job-count': number,
-  jobs: JobType[]
-};
+// export type JobsType = {
+//   'job-count': number,
+//   jobs: JobType[]
+// };
 
-function jobsReducer(state: { 'job-count': number, jobs: JobType[] }, action: { type: string, jobs: { 'job-count': number, jobs: JobType[] } }) {
+export type JobsType = typeof data;
+
+function jobsReducer(state: JobsType, action: { type: string, jobs: JobsType }): JobsType {
   switch (action.type) {
     case 'SET_JOBS':
       return action.jobs;
@@ -33,19 +35,24 @@ function jobsReducer(state: { 'job-count': number, jobs: JobType[] }, action: { 
   }
 }
 
-const JobsContext = createContext<JobsType | React.Dispatch<{
-  type: string;
-  jobs: {
-    'job-count': number;
-    jobs: JobType[];
-  };
-}>>({});
+const initialState: JobsType = {
+  'job-count': 1,
+  jobs: [data.jobs[0]],
+};
+
+const JobsContext = createContext<{
+  jobs: JobsType;
+  dispatchJobs: React.Dispatch<any>
+}>({
+  jobs: initialState,
+  dispatchJobs: () => { },
+});
 
 export function JobsContextProvider({ children }: { children: React.ReactNode }) {
-  // const data = () => getJobs().then((res) => res);
-  const [jobs, dispatchJobs] = useReducer(jobsReducer, {} as JobsType);
+  const [jobs, dispatchJobs] = useReducer(jobsReducer, initialState);
 
   return (
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
     <JobsContext.Provider value={{ jobs, dispatchJobs }}>
       {children}
     </JobsContext.Provider>

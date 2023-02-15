@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import React, { useContext, useState } from 'react';
 import JobsContext, { JobsType, JobType } from '../contexts/JobsContext';
-import getJobs from '../services/jobs';
 import background from './assets/backgroundImg.png';
 
-function Header({ allJobs }: { allJobs: JobsType | undefined }) {
-  const { jobs, dispatchJobs } = useContext(JobsContext);
+function Header({ allJobs }: { allJobs: JobsType | any }) {
+  const { dispatchJobs } = useContext(JobsContext);
   const [searchInput, setSearchInput] = useState('');
 
   const setSearch = () => {

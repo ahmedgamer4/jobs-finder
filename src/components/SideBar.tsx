@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import JobsContext, { JobsType, JobType } from '../contexts/JobsContext';
-import getJobs from '../services/jobs';
 
-function SideBar({ allJobs }: { allJobs: JobsType | undefined }) {
-  const { jobs, dispatchJobs } = useContext(JobsContext);
+function SideBar({ allJobs }: { allJobs: JobsType | any }) {
+  const { dispatchJobs } = useContext(JobsContext);
 
-  const onClick = async (e) => {
+  const onClick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     const newJobs = allJobs.jobs.filter((j: JobType) => j.job_type === 'full_time');
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -14,7 +13,7 @@ function SideBar({ allJobs }: { allJobs: JobsType | undefined }) {
       : dispatchJobs({ type: 'SET_JOBS', jobs: allJobs });
   };
 
-  const handleCountrySearchChange = (e) => {
+  const handleCountrySearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newJobs = allJobs.jobs.filter((j: JobType) => j.candidate_required_location
       .toLowerCase().includes(e.target.value.toLowerCase()));
     dispatchJobs({ type: 'SET_JOBS', jobs: { 'jobs-count': newJobs.length, jobs: newJobs } });

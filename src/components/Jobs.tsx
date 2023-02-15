@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import React, { useContext } from 'react';
 import Job from './Job';
-import getJobs from '../services/jobs';
-import JobsContext, { JobsType, JobType } from '../contexts/JobsContext';
+import JobsContext, { JobType } from '../contexts/JobsContext';
 import PaginatedItems from './Pagination';
 
 function Jobs({
   currentItems, setCurrentItems,
-}: { currentItems: JobType[] | undefined, setCurrentItems: (value: JobType[]) => void }) {
-  const { jobs } = useContext<JobsType | React.Dispatch<{ type: string; jobs: { 'job-count': number; jobs: JobType[] } }>>(JobsContext);
+}: { currentItems: JobType[] | any, setCurrentItems: (value: JobType[]) => void }) {
+  const { jobs } = useContext(JobsContext);
 
   return (
     <section className="flex-grow mt-6">

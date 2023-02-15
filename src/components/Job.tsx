@@ -18,7 +18,7 @@ type JobType = {
 };
 
 function Job({ job }: { job: JobType }) {
-  const [, dispatchJob] = useContext(JobContext);
+  const { dispatchJob } = useContext(JobContext);
   const today = new Date();
 
   return (

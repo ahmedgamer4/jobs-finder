@@ -1,6 +1,11 @@
 import React, { createContext, useReducer, useMemo } from 'react';
+import data from '../jobs.json';
 
-function jobReducer(state: object, action: { type: string, job: object }) {
+const initialState = data.jobs[0];
+
+type IntialStateType = typeof initialState;
+
+function jobReducer(state: IntialStateType, action: { type: string, job: IntialStateType }) {
   switch (action.type) {
     case 'SET':
       return action.job;
@@ -9,13 +14,19 @@ function jobReducer(state: object, action: { type: string, job: object }) {
   }
 }
 
-const JobContext = createContext({});
+const JobContext = createContext<{
+  job: IntialStateType;
+  dispatchJob: React.Dispatch<any>
+}>({
+  job: initialState,
+  dispatchJob: () => { },
+});
 
 export function JobContextProvider({ children }: { children: React.ReactNode }) {
-  const [job, dispatchJob] = useReducer(jobReducer, {});
-  const value = useMemo(() => [job, dispatchJob], [job]);
+  const [job, dispatchJob] = useReducer(jobReducer, initialState);
   return (
-    <JobContext.Provider value={value}>
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
+    <JobContext.Provider value={{ job, dispatchJob }}>
       {children}
     </JobContext.Provider>
   );
