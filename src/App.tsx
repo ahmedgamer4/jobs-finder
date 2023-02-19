@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-query';
 import {
-  Link, Routes, Route,
+  Routes, Route,
 } from 'react-router-dom';
 import Header from './components/Header';
 import SideBar from './components/SideBar';
